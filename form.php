@@ -65,8 +65,7 @@ if (isset($_REQUEST['course_type'])) {
 }
 
 //After submit button is clicked
-if (isset($_REQUEST['level_btn'])) {
-    if(isset($_REQUEST['level_arr'])){
+if(isset($_REQUEST['level_arr'])){
         $nat_arr = $_REQUEST['nat_arr'];
         $course_arr = $_REQUEST['course_arr'];
         if(isset($_REQUEST['course_type_all'])){
@@ -76,7 +75,7 @@ if (isset($_REQUEST['level_btn'])) {
              $level_arr_all = $_REQUEST['level_arr_all'];
         }
         $levell_arr_keys = $_REQUEST['level_keys'];
-        $level_array = $_REQUEST['level_arr'];
+      $level_array = $_REQUEST['level_arr'];
         $fee_type = $_REQUEST['fee_type'];
         $nat_type = $_REQUEST['nat_type'];
         $course_type = $_REQUEST['course_type'];
@@ -92,19 +91,17 @@ if (isset($_REQUEST['level_btn'])) {
                     if($key1 == $course_type){
                         $levell_arr = json_decode(json_encode($value1), True);
                         foreach ($levell_arr as $key2 => $value2) {
-                            foreach ($level_array as $level) {
-                                if($key2 == $level){
-                                    $total_fees = $total_fees + $value2['amount'];
+                        	  if($key2 == $level_array){
+                              	     $total_fees = $total_fees + $value2['amount'];
                                 }
-                            }
+                        
                         }
                         break;
                     }
                 }
             }
         }
-    }
-}
+ }
 
 ?>
 <html>
@@ -126,6 +123,10 @@ if (isset($_REQUEST['level_btn'])) {
     border-width: 0;
     border-radius: 3px;
     border-color: #ddd;
+    }
+    .reset_level_type{
+    	align-content: center;
+    	text-align: center;
     }
 </style>
     </head>
@@ -295,9 +296,9 @@ if (isset($_REQUEST['level_btn'])) {
                                                     //if true is proceed, show all levels
                                                       for ($i=0;$i<count($all_level_arr);$i++){ ?>
                 <div>
-                    <input type="checkbox" name="level_arr_all[]" id="level_type_
+                    <input type="radio" name="level_arr_all" id="level_type_
 <?php echo $i;?>" value=
-                    <?php echo $all_level_arr[$i];?> <?php if(isset($level_arr_all)) {  echo ($level_arr_all[$i]==$all_level_arr[$i]) ? 'checked' : '';} ?> >
+                    <?php echo $all_level_arr[$i];?> <?php if(isset($level_arr_all)) {  echo ($level_arr_all==$all_level_arr[$i]) ? 'checked' : '';} ?> >
                     <label for="level_type_
 <?php echo $i;?>" class="label-btn" style="font-weight:normal;">
                         <?php echo $all_level_arr[$i];?>
@@ -308,14 +309,14 @@ if (isset($_REQUEST['level_btn'])) {
                                                   }else{
                                                       echo $$levell_arr_keys[0];
                                                   }
-                                                  echo '<input type="hidden" name="level_arr[]" value="'.$levell_arr_keys[0].'"/>';
+                                                  echo '<input type="hidden" name="level_arr" value="'.$levell_arr_keys[0].'"/>';
                                               }else{
                                                 //else display all levels
                                                   for ($i=0;$i<count($levell_arr_keys);$i++){ ?>
                 <div>
-                    <input type="checkbox" name="level_arr[]" id="level_type_
+                    <input type="radio" name="level_arr" id="level_type_
 <?php echo $i;?>" value=
-                    <?php echo $levell_arr_keys[$i];?> <?php if(isset($level_array)) { echo ($level_array[$i]==$levell_arr_keys[$i]) ? 'checked' : '';  }  ?> >
+                    <?php echo $levell_arr_keys[$i];?> <?php if(isset($level_array)) { echo ($level_array==$levell_arr_keys[$i]) ? 'checked' : '';  }  ?> >
                     <label for="level_type_
 <?php echo $i;?>" class="label-btn" style="font-weight:normal;">
                         <?php echo $levell_arr_keys[$i];?>
@@ -356,26 +357,30 @@ if (isset($_REQUEST['level_btn'])) {
                  <?php if(isset($course_type_all)){
                     echo '<input type="hidden" name="course_type_all" value="'.$course_type_all.'"/>';
                 }?>
-                <input type="submit"  name="level_btn" id="level_btn" class="btn-success btn-sm m-b-5" style="margin-top:15%;" value="Submit"  >
-            </form>
+                </form>
            
         </div>
     </div>
      <?php } ?>
         </div>
+        <div class="reset_level_type" >
+     
+        <?php 
+if(isset($total_fees)){
+    echo "Total fees to be paid is <b>".$total_fees."</b>.";
+}
+        ?>
+       
+        </div>
         <div class="col-md-3"> </div>
         </div>
 
-        <?php 
-if(isset($total_fees)){
-    echo "Total fees to be paid is ".$total_fees.".";
-}
-        ?>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script>
             $('input[type=radio]').on('change', function() {
                 var formName = $(this).closest('form').attr('name')
+
                 $(this).closest("form").submit();
             }
                                      );
